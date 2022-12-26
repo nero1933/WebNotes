@@ -17,14 +17,14 @@ class DataMixin:
         context = kwargs
         context['menu'] = menu
         self.kwargs['username'] = self.request.user
-        # context['folders'] = Folder.objects.filter(user=self.request.user)
         context['folders'] = Folder.objects.filter(user__username=self.kwargs['username']).select_related('user')
-        context['notes'] = Note.objects.filter(user__username=self.kwargs['username']).select_related('user')
+        # context['notes'] = Note.objects.filter(user__username=self.kwargs['username']).select_related('user')
 
-        if 'note_selected' not in context:
-            context['note_selected'] = 0
-        elif 'folder_selected' not in context:
-            context['folder_selected'] = 0
+
+        # if 'note_selected' not in context:
+        #     context['note_selected'] = 0
+        # elif 'folder_selected' not in context:
+        #     context['folder_selected'] = 0
 
         return context
 

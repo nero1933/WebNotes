@@ -1,6 +1,8 @@
-{% extends 'notes/base.html' %}
+{% extends 'notes/private_notes.html' %}
 
 {% block content %}
-    {{ note.titile }}
-    {{ note.content }}
+    <div class="container-notes">
+        {{ note.title }}
+        {{ note.content }}
+    </div>
 {% endblock %}

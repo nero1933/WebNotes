@@ -1,7 +1,7 @@
 {% extends 'notes/private_notes.html' %}
 
 {% block content %}
-    <div>
+    <div class="container-notes">
         {{ title }}
 
         <form action="{% url 'add_folder' %}" method="post">

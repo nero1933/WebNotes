@@ -9,8 +9,6 @@ from django.views.generic import CreateView, ListView, DetailView
 from .forms import *
 from .utils import *
 
-from slugify import slugify
-
 menu = [
     {'title': 'Private Notes', 'url_name': 'private_notes'},
     {'title': 'Group notes', 'url_name': 'group_notes'},
@@ -20,22 +18,6 @@ menu = [
 def index(request):
     return render(request, 'notes/index.html', {'menu': menu, 'title': 'Home Page'})
 
-
-# class WomenHome(DataMixin, ListView):
-#     model = Women
-#     template_name = 'women/index.html'
-#     context_object_name = 'posts'
-#
-#     def get_context_data(self, *, object_list=None, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#         c_def = self.get_user_context(title="Главная страница")
-#         return dict(list(context.items()) + list(c_def.items()))
-#
-#     def get_queryset(self):
-#         return Women.objects.filter(is_published=True).select_related('cat')
-
-
-#  return Note.objects.filter(user=self.request.user, folder__slug=self.kwargs['folder_slug']).select_related('folder')
 
 class PrivateNotes(LoginRequiredMixin, DataMixin, ListView):
     model = Note
@@ -48,8 +30,9 @@ class PrivateNotes(LoginRequiredMixin, DataMixin, ListView):
         return dict(list(context.items()) + list(c_def.items()))
 
     def get_queryset(self):
-        return Note.objects.filter(user=self.request.user.id)
-        # return Note.objects.filter(user__username='username').select_related('user')
+        self.kwargs['username'] = self.request.user
+        # return Note.objects.filter(user__username=self.kwargs['username']).select_related('user')
+        return Note.objects.filter(user__username=self.kwargs['username']).select_related('user')
 
 
 class ShowNote(LoginRequiredMixin, DataMixin, DetailView):
@@ -99,27 +82,10 @@ class AllFolders(LoginRequiredMixin, DataMixin, ListView):
         return dict(list(context.items()) + list(c_def.items()))
 
 
-# class WomenCategory(DataMixin, ListView):
-#     model = Women
-#     template_name = 'women/index.html'
-#     context_object_name = 'posts'
-#     allow_empty = False
-#
-#     def get_queryset(self):
-#         return Women.objects.filter(cat__slug=self.kwargs['cat_slug'], is_published=True).select_related('cat')
-#
-#     def get_context_data(self, *, object_list=None, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#         c = Category.objects.get(slug=self.kwargs['cat_slug'])
-#         c_def = self.get_user_context(title='Категория - ' + str(c.name),
-#                                       cat_selected=c.pk)
-#         return dict(list(context.items()) + list(c_def.items()))
-
-
 class ShowFolder(LoginRequiredMixin, DataMixin, ListView):
     model = Note
-    template_name = 'notes/show_folder.html'
-    context_object_name = 'folder'
+    template_name = 'notes/private_notes.html'
+    context_object_name = 'notes'
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -128,7 +94,9 @@ class ShowFolder(LoginRequiredMixin, DataMixin, ListView):
         return dict(list(context.items()) + list(c_def.items()))
 
     def get_queryset(self):
-        return Note.objects.filter(user__username=self.kwargs['username']).select_related('user').select_related('folder')
+        return Note.objects.filter(user__username=self.kwargs['username'],
+                                   folder__slug=self.kwargs['folder_slug']
+                                   ).select_related('user').select_related('folder')
 
 
 class AddFolder(LoginRequiredMixin, DataMixin, DataAssignMixin, CreateView):
