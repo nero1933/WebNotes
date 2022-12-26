@@ -1,0 +1,13 @@
+{% extends 'notes/private_notes.html' %}
+
+{% block content %}
+    <div class="container-notes">
+        {% for folder in folders %}
+            <div>
+                <p>Folder: {{ folder }}</p>
+                <p><a href="{{ folder.get_absolute_url }}">Reed all</a></p>
+                <br>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

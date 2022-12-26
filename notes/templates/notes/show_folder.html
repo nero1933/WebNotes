@@ -1,0 +1,13 @@
+{% extends 'notes/private_notes.html' %}
+
+{% block content %}
+    <div class="container-notes">
+        {% for note in folder %}
+            <div>
+                <p>{{ note.title }}</p>
+                <p>{{ note.content }}</p>
+                <br>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

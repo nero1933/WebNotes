@@ -1,0 +1,14 @@
+{% extends 'notes/private_notes.html' %}
+
+{% block content %}
+    <div>
+        {{ title }}
+
+        <form action="{% url 'add_folder' %}" method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+
+            <button type="submit">Add Folder</button>
+        </form>
+    </div>
+{% endblock %}

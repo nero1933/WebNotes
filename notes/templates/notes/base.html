@@ -1,0 +1,55 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>{{ title }}</title>
+    <meta charset="UTF-8">
+    <link href="{% static 'notes/css/styles.css' %}" rel="stylesheet">
+    <link href="{% static 'notes/images/home-icon.png' %}" rel="shortcut icon" type="image/x-icon">
+</head>
+<body>
+
+<!-- header -->
+{% block header %}
+<header class="container primary-header">
+    <a class="logo" href="{% url 'home' %}">
+        <img class="logo" src="{% static 'notes/images/home-icon.png' %}" alt="logo">
+    </a>
+    <nav class="primary-nav">
+        <ul class="primary-nav-links">
+            {% if  request.user.is_authenticated %}
+                {% for m in menu %}
+                <li class="primary-nav-item"><a href="{% url m.url_name %}">{{ m.title }}</a></li>
+                {% endfor %}
+                <li class="primary-nav-item push-right">{{ user.username }}</li>
+                <li class="primary-nav-item"><a href="{% url 'logout' %}" >Logout</a></li>
+            {% else %}
+                <li class="primary-nav-item">WebNotes</li>
+                <li class="primary-nav-item push-right"><a href="{% url 'sign_in' %}" >Sign in</a></li>
+                <li class="primary-nav-item"><a href="{% url 'login' %}" >Login</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+</header>
+{% endblock %}
+
+
+<!-- container -->
+<div class="container">
+
+<!-- sidebar -->
+    {% block sidebar %}{% endblock %}
+
+<!-- content -->
+    {% block content %}{% endblock %}
+
+</div>
+
+<!-- footer -->
+<footer>
+    <span>WebNotes is a site made by Nero for learning purpose</span>
+</footer>
+
+</body>
+</html>

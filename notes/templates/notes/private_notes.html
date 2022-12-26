@@ -1,0 +1,39 @@
+{% extends 'notes/base.html' %}
+
+{% block sidebar %}
+    <aside class="aside-left">
+        <div class="sidebar">
+            <span class=" sidebar-item"><a href="{% url 'add_private_note' %}">Add Note</a></span>
+        </div>
+
+        <div class="sidebar">
+            <ul class="sidebar-links">
+                <li class="sidebar-item"><a href="{% url 'add_folder' %}">Add Folder</a></li>
+                <li class="sidebar-item"></li>
+            {% if folders|length > 0 %}
+                <li class="sidebar-item"><a href="{% url 'all_folders' %}">All Folder</a></li>
+                <li class="sidebar-item"></li>
+                {% for f in folders %}
+                    <li class="sidebar-item"><a href="{{ f.get_absolute_url }}">{{ f }}</a></li>
+                {% endfor %}
+            {% endif %}
+
+
+            </ul>
+        </div>
+    </aside>
+{% endblock %}
+
+{% block content %}
+    <div class="container-notes">
+        {% for note in notes %}
+            <div>
+                <p>{{ note.title }}: </p>
+                <p>{{ note.content }}</p>
+                <p><a href="{{ note.get_absolute_url }}">Reed all</a></p>
+                <br>
+            </div>
+        {% endfor %}
+    </div>
+
+{% endblock %}
