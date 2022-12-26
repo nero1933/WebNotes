@@ -1,4 +1,4 @@
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, AbstractUser, UserManager
 from django.db import models
 from django.urls import reverse
 
@@ -33,3 +33,15 @@ class Folder(models.Model):
 
     def get_absolute_url(self):
         return reverse('show_folder', kwargs={'username': self.user.username, 'folder_slug': self.slug})
+
+
+# CustomUser
+
+
+# class CustomUserManager(UserManager):
+#     def get(self, *args, **kwargs):
+#         return super().select_related().get(*args, **kwargs)
+#
+#
+# class CustomUser(AbstractUser):
+#     objects = CustomUserManager()

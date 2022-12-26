@@ -10,13 +10,17 @@
             <ul class="sidebar-links">
                 <li class="sidebar-item"><a href="{% url 'add_folder' %}">Add Folder</a></li>
                 <li class="sidebar-item"></li>
-            {% if folders|length > 0 %}
-                <li class="sidebar-item"><a href="{% url 'all_folders' %}">All Folder</a></li>
-                <li class="sidebar-item"></li>
-                {% for f in folders %}
-                    <li class="sidebar-item"><a href="{{ f.get_absolute_url }}">{{ f }}</a></li>
-                {% endfor %}
-            {% endif %}
+                {% if folders|length > 0 %}
+                    <li class="sidebar-item"><a href="{% url 'all_folders' %}">All Folder</a></li>
+                    <li class="sidebar-item"></li>
+                    {% for f in folders %}
+                        {% if f.pk == folder_selected %}
+                            <li class="sidebar-selected">{{ f.title }}</li>
+                        {% else %}
+                            <li class="sidebar-item"><a href="{{ f.get_absolute_url }}">{{ f }}</a></li>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
 
 
             </ul>

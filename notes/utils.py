@@ -16,10 +16,16 @@ class DataMixin:
     def get_user_context(self, **kwargs):
         context = kwargs
         context['menu'] = menu
-        # context['folders'] = Folder.objects.filter(user=self.request.user.id)
-        # context['folders'] = Folder.objects.annotate(Count('user'), filter=Q(user=self.request.user.id))
-        context['folders'] = Folder.objects.filter(user=self.request.user.id).annotate(Count('user'))
-        print(context['folders'])
+        self.kwargs['username'] = self.request.user
+        # context['folders'] = Folder.objects.filter(user=self.request.user)
+        context['folders'] = Folder.objects.filter(user__username=self.kwargs['username']).select_related('user')
+        context['notes'] = Note.objects.filter(user__username=self.kwargs['username']).select_related('user')
+
+        if 'note_selected' not in context:
+            context['note_selected'] = 0
+        elif 'folder_selected' not in context:
+            context['folder_selected'] = 0
+
         return context
 
 
