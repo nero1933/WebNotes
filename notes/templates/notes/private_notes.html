@@ -3,7 +3,19 @@
 {% block sidebar %}
     <aside class="aside-left">
         <div class="sidebar">
-            <span class=" sidebar-item"><a href="{% url 'add_private_note' %}">Add Note</a></span>
+            <li class="sidebar-item"><a href="{% url 'add_private_note' %}">Add Note</a></li>
+            <li class="sidebar-item"></li>
+            {% if notes|length > 0 %}
+                <li class="sidebar-item"><a href="{% url 'private_notes' %}">All Notes</a></li>
+                <li class="sidebar-item"></li>
+                {% for n in notes %}
+                    {% if n.pk == note_selected %}
+                        <li class="sidebar-selected">{{ n }}</li>
+                    {% else %}
+                        <li class="sidebar-item"><a href="{{ n.get_absolute_url }}">{{ n }}</a></li>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
         </div>
 
         <div class="sidebar">
@@ -14,8 +26,10 @@
                     <li class="sidebar-item"><a href="{% url 'all_folders' %}">All Folder</a></li>
                     <li class="sidebar-item"></li>
                     {% for f in folders %}
-                        {% if f.pk == folder_selected %}
-                            <li class="sidebar-selected">{{ f.title }}</li>
+                        {% if f.pk == folder_selected and folder_link %}
+                            <li class="sidebar-selected"><a href="{{ f.get_absolute_url }}">{{ f }}</a></li>
+                        {% elif f.pk == folder_selected %}
+                            <li class="sidebar-selected">{{ f }}</li>
                         {% else %}
                             <li class="sidebar-item"><a href="{{ f.get_absolute_url }}">{{ f }}</a></li>
                         {% endif %}
@@ -30,13 +44,24 @@
 
 {% block content %}
     <div class="container-notes">
-        {% for note in notes %}
-            <div>
-                <p>{{ note.title }}: </p>
-                <p>{{ note.content }}</p>
-                <p><a href="{{ note.get_absolute_url }}">Reed all</a></p>
-                <br>
-            </div>
-        {% endfor %}
+        {% if is_folder %}
+            {% for note in folder_notes %}
+                <div>
+                    <p>{{ note.title }}: </p>
+                    <p>{{ note.content }}</p>
+                    <p><a href="{{ note.get_absolute_url }}">Reed all</a></p>
+                    <br>
+                </div>
+            {% endfor %}
+        {% else %}
+            {% for note in notes %}
+                <div>
+                    <p>{{ note.title }}: </p>
+                    <p>{{ note.content }}</p>
+                    <p><a href="{{ note.get_absolute_url }}">Reed all</a></p>
+                    <br>
+                </div>
+            {% endfor %}
+        {% endif %}
     </div>
 {% endblock %}

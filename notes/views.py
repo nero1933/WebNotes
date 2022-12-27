@@ -22,17 +22,16 @@ def index(request):
 class PrivateNotes(LoginRequiredMixin, DataMixin, ListView):
     model = Note
     template_name = 'notes/private_notes.html'
-    context_object_name = 'notes'
+    # context_object_name = 'notes'
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         c_def = self.get_user_context(title='Private Notes')
         return dict(list(context.items()) + list(c_def.items()))
 
-    def get_queryset(self):
-        self.kwargs['username'] = self.request.user
-        # return Note.objects.filter(user__username=self.kwargs['username']).select_related('user')
-        return Note.objects.filter(user__username=self.kwargs['username']).select_related('user')
+    # def get_queryset(self):
+    #     self.kwargs['username'] = self.request.user
+    #     return Note.objects.filter(user__username=self.kwargs['username']).select_related('user')
 
 
 class ShowNote(LoginRequiredMixin, DataMixin, DetailView):
@@ -42,14 +41,18 @@ class ShowNote(LoginRequiredMixin, DataMixin, DetailView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        c_def = self.get_user_context(title=context['note'])
+        print(self.object.pk)
+        c_def = self.get_user_context(title='Note: ' + str(context['note']),
+                                      note_selected=self.object.pk,
+                                      folder_selected=self.object.folder.pk,
+                                      folder_link=True)
         return dict(list(context.items()) + list(c_def.items()))
 
     def get_object(self, queryset=None):
         try:
             return Note.objects.get(user=self.request.user.id, slug=self.kwargs.get('note_slug', None))
         except self.model.DoesNotExist:
-            raise Http404("No note found matching the query")
+            raise Http404("No such note")
 
 
 class AddPrivateNote(LoginRequiredMixin, DataMixin, DataAssignMixin, CreateView):
@@ -85,18 +88,24 @@ class AllFolders(LoginRequiredMixin, DataMixin, ListView):
 class ShowFolder(LoginRequiredMixin, DataMixin, ListView):
     model = Note
     template_name = 'notes/private_notes.html'
-    context_object_name = 'notes'
+    context_object_name = 'folder_notes'
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         f = Folder.objects.get(user=self.request.user.id, slug=self.kwargs.get('folder_slug', None))
-        c_def = self.get_user_context(title='Folder -' + str(f.title), folder_selected=f.pk)
+        c_def = self.get_user_context(title='Folder: ' + str(f.title), folder_selected=f.pk, is_folder=True)
         return dict(list(context.items()) + list(c_def.items()))
 
     def get_queryset(self):
         return Note.objects.filter(user__username=self.kwargs['username'],
                                    folder__slug=self.kwargs['folder_slug']
                                    ).select_related('user').select_related('folder')
+
+    def get(self,  *args, **kwargs):
+        try:
+            return super().get(self,  *args, **kwargs)
+        except Folder.DoesNotExist:
+            raise Http404('No such folder')
 
 
 class AddFolder(LoginRequiredMixin, DataMixin, DataAssignMixin, CreateView):

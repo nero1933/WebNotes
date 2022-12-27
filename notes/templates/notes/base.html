@@ -20,14 +20,14 @@
         <ul class="primary-nav-links">
             {% if  request.user.is_authenticated %}
                 {% for m in menu %}
-                <li class="primary-nav-item"><a href="{% url m.url_name %}">{{ m.title }}</a></li>
+                    <li class="primary-nav-item"><a href="{% url m.url_name %}">{{ m.title }}</a></li>
                 {% endfor %}
                 <li class="primary-nav-item push-right">{{ user.username }}</li>
                 <li class="primary-nav-item"><a href="{% url 'logout' %}" >Logout</a></li>
             {% else %}
                 <li class="primary-nav-item">WebNotes</li>
-                <li class="primary-nav-item push-right"><a href="{% url 'sign_in' %}" >Sign in</a></li>
-                <li class="primary-nav-item"><a href="{% url 'login' %}" >Login</a></li>
+                <li class="primary-nav-item push-right"><a href="{% url 'login' %}" >Login</a></li>
+                <li class="primary-nav-item"><a href="{% url 'sign_in' %}" >Sign in</a></li>
             {% endif %}
         </ul>
     </nav>
@@ -39,10 +39,10 @@
 <div class="container">
 
 <!-- sidebar -->
-    {% block sidebar %}{% endblock %}
+{% block sidebar %}{% endblock %}
 
 <!-- content -->
-    {% block content %}{% endblock %}
+{% block content %}{% endblock %}
 
 </div>
 
