@@ -4,6 +4,7 @@ from django.shortcuts import redirect
 
 from .models import *
 
+from re import findall
 from slugify import slugify
 
 menu = [
@@ -20,16 +21,38 @@ class DataMixin:
         context['folders'] = Folder.objects.filter(user__username=self.kwargs['username']).select_related('user')
         context['notes'] = Note.objects.filter(user__username=self.kwargs['username']).select_related('user')
 
-
         return context
 
 
 class DataAssignMixin:
-    def form_valid(self, form, url):
-        obj = form.save(commit=False)
-        obj.slug = slugify(obj.title)
-        obj.user = self.request.user
-        obj.save()
+    # model.objects.get() and while loop is probably not the best solution.
+    # Maybe counting the identical titles where user is the same
+    # and adding duplicate number ('-02') will be better
+    @staticmethod
+    def slug_check(model, user_id, slug):
+        """
+        Method is checking is there an object in db with this slug.
+        If True: add to slug '-02', if slug with '-02' exists try '-03'.
+        Continue until slug will be uniq for the user.
+        """
+        try:
+            obj = model.objects.get(user=user_id, slug=slug)
+            slug = obj.slug + '-02'
+            obj = model.objects.get(user=user_id, slug=slug)
+
+            while obj:
+                duplicate = findall(r'(?:\-)(\d{2})(?<=$)', slug)[0]
+                slug = slug[:-2] + str(int(duplicate) + 1).rjust(2, '0')
+                obj = model.objects.get(user=user_id, slug=slug)
+
+        except model.DoesNotExist:
+            return slug
+
+    def form_valid(self, obj, form, url):
+        form_obj = form.save(commit=False)
+        form_obj.user = self.request.user
+        form_obj.slug = self.slug_check(obj, self.request.user.pk, slugify(form_obj.title))
+        form_obj.save()
         return redirect(url)
 
 

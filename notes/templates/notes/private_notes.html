@@ -3,19 +3,21 @@
 {% block sidebar %}
     <aside class="aside-left">
         <div class="sidebar">
-            <li class="sidebar-item"><a href="{% url 'add_private_note' %}">Add Note</a></li>
-            <li class="sidebar-item"></li>
-            {% if notes|length > 0 %}
-                <li class="sidebar-item"><a href="{% url 'private_notes' %}">All Notes</a></li>
+            <ul class="sidebar-links">
+                <li class="sidebar-item"><a href="{% url 'add_private_note' %}">Add Note</a></li>
                 <li class="sidebar-item"></li>
-                {% for n in notes %}
-                    {% if n.pk == note_selected %}
-                        <li class="sidebar-selected">{{ n }}</li>
-                    {% else %}
-                        <li class="sidebar-item"><a href="{{ n.get_absolute_url }}">{{ n }}</a></li>
-                    {% endif %}
-                {% endfor %}
-            {% endif %}
+                {% if notes|length > 0 %}
+                    <li class="sidebar-item"><a href="{% url 'private_notes' %}">All Notes</a></li>
+                    <li class="sidebar-item"></li>
+                    {% for n in notes %}
+                        {% if n.pk == note_selected %}
+                            <li class="sidebar-selected">{{ n }}</li>
+                        {% else %}
+                            <li class="sidebar-item"><a href="{{ n.get_absolute_url }}">{{ n }}</a></li>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+            </ul>
         </div>
 
         <div class="sidebar">

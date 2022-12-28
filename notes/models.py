@@ -6,7 +6,7 @@ from django.urls import reverse
 # Create your models here.
 class Note(models.Model):
     title = models.CharField(max_length=255)
-    slug = models.SlugField(max_length=255, unique=True, db_index=True)
+    slug = models.SlugField(max_length=255, db_index=True)
     content = models.TextField()
     icon = models.ImageField(upload_to='photos/%Y/%m/%d/', blank=True)
     time_created = models.DateTimeField(auto_now_add=True)
@@ -23,7 +23,7 @@ class Note(models.Model):
 
 class Folder(models.Model):
     title = models.CharField(max_length=255)
-    slug = models.SlugField(max_length=255, unique=True, db_index=True)
+    slug = models.SlugField(max_length=255, db_index=True)
     user = models.ForeignKey(User, on_delete=models.PROTECT)
     time_created = models.DateTimeField(auto_now_add=True)
     time_updated = models.DateTimeField(auto_now=True)

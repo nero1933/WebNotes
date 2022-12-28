@@ -41,10 +41,11 @@ class ShowNote(LoginRequiredMixin, DataMixin, DetailView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        print(self.object.pk)
+        if self.object.folder:
+            context['folder_selected'] = self.object.folder.pk
+
         c_def = self.get_user_context(title='Note: ' + str(context['note']),
                                       note_selected=self.object.pk,
-                                      folder_selected=self.object.folder.pk,
                                       folder_link=True)
         return dict(list(context.items()) + list(c_def.items()))
 
@@ -67,7 +68,7 @@ class AddPrivateNote(LoginRequiredMixin, DataMixin, DataAssignMixin, CreateView)
         return dict(list(context.items()) + list(c_def.items()))
 
     def form_valid(self, form, *args):
-        return super().form_valid(form, 'private_notes')
+        return super().form_valid(Note, form, 'private_notes')
 
     def get_form_kwargs(self):
         kwargs = super(AddPrivateNote, self).get_form_kwargs()
@@ -120,7 +121,7 @@ class AddFolder(LoginRequiredMixin, DataMixin, DataAssignMixin, CreateView):
         return dict(list(context.items()) + list(c_def.items()))
 
     def form_valid(self, form, *args):
-        return super().form_valid(form, 'all_folders')
+        return super().form_valid(Folder, form, 'all_folders')
 
 
 def group_notes(request):
