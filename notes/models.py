@@ -20,6 +20,9 @@ class Note(models.Model):
     def get_absolute_url(self):
         return reverse('show_note', kwargs={'username': self.user.username, 'note_slug': self.slug})
 
+    class Meta:
+        ordering = ['time_created']
+
 
 class Folder(models.Model):
     title = models.CharField(max_length=255)

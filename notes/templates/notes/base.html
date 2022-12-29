@@ -38,11 +38,48 @@
 <!-- container -->
 <div class="container">
 
-<!-- sidebar -->
-{% block sidebar %}{% endblock %}
+    <div class="container-wrapper">
 
-<!-- content -->
-{% block content %}{% endblock %}
+        <!-- sidebar -->
+        {% block sidebar %}{% endblock %}
+
+        <!-- content -->
+        {% block content %}{% endblock %}
+
+    </div>
+
+    <!-- pagination -->
+    {% if  page_obj.has_other_pages %}
+        <nav class="container-pagination">
+            <ul class="pagination">
+
+                {% if page_obj.has_previous %}
+                    <li class="pagination-previous">
+                        <a href="?page={{ page_obj.previous_page_number }}">&lt;</a>
+                    </li>
+                {% endif %}
+
+                {% for p in paginator.page_range %}
+                    {% if page_obj.number == p %}
+                        <li class="pagination-item-selected">
+                            {{ p }}
+                        </li>
+                    {% elif p >= page_obj.number|add:-2 and p <= page_obj.number|add:2 %}
+                        <li class="pagination-item">
+                            <a href="?page={{ p }}">{{ p }}</a>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+
+                {% if page_obj.has_next %}
+                    <li class="pagination-next">
+                        <a href="?page={{ page_obj.next_page_number }}">&gt;</a>
+                    </li>
+                {% endif %}
+
+            </ul>
+        </nav>
+    {% endif %}
 
 </div>
 

@@ -22,16 +22,16 @@ def index(request):
 class PrivateNotes(LoginRequiredMixin, DataMixin, ListView):
     model = Note
     template_name = 'notes/private_notes.html'
-    # context_object_name = 'notes'
+    context_object_name = 'notes'
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         c_def = self.get_user_context(title='Private Notes')
         return dict(list(context.items()) + list(c_def.items()))
 
-    # def get_queryset(self):
-    #     self.kwargs['username'] = self.request.user
-    #     return Note.objects.filter(user__username=self.kwargs['username']).select_related('user')
+    def get_queryset(self):
+        self.kwargs['username'] = self.request.user
+        return Note.objects.filter(user__username=self.kwargs['username']).select_related('user')
 
 
 class ShowNote(LoginRequiredMixin, DataMixin, DetailView):
@@ -79,11 +79,15 @@ class AddPrivateNote(LoginRequiredMixin, DataMixin, DataAssignMixin, CreateView)
 class AllFolders(LoginRequiredMixin, DataMixin, ListView):
     model = Folder
     template_name = 'notes/all_folders.html'
+    context_object_name = 'folders'
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         c_def = self.get_user_context(title='All Folders')
         return dict(list(context.items()) + list(c_def.items()))
+
+    def get_queryset(self):
+        return Folder.objects.filter(user__username=self.request.user).select_related('user')
 
 
 class ShowFolder(LoginRequiredMixin, DataMixin, ListView):

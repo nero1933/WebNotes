@@ -14,12 +14,14 @@ menu = [
 
 
 class DataMixin:
+    paginate_by = 1
+
     def get_user_context(self, **kwargs):
         context = kwargs
         context['menu'] = menu
         self.kwargs['username'] = self.request.user
-        context['folders'] = Folder.objects.filter(user__username=self.kwargs['username']).select_related('user')
-        context['notes'] = Note.objects.filter(user__username=self.kwargs['username']).select_related('user')
+        context['sidebar_folders'] = Folder.objects.filter(user__username=self.kwargs['username']).select_related('user')
+        context['sidebar_notes'] = Note.objects.filter(user__username=self.kwargs['username']).select_related('user')
 
         return context
 
@@ -41,8 +43,9 @@ class DataAssignMixin:
             obj = model.objects.get(user=user_id, slug=slug)
 
             while obj:
-                duplicate = findall(r'(?:\-)(\d{2})(?<=$)', slug)[0]
-                slug = slug[:-2] + str(int(duplicate) + 1).rjust(2, '0')
+                # duplicate_number = findall(r'(?:\-)(\d{2})(?<=$)', slug)[0]
+                duplicate_number = slug[-2:]
+                slug = slug[:-2] + str(int(duplicate_number) + 1).rjust(2, '0')
                 obj = model.objects.get(user=user_id, slug=slug)
 
         except model.DoesNotExist:

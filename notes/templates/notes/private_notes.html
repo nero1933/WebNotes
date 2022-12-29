@@ -6,10 +6,10 @@
             <ul class="sidebar-links">
                 <li class="sidebar-item"><a href="{% url 'add_private_note' %}">Add Note</a></li>
                 <li class="sidebar-item"></li>
-                {% if notes|length > 0 %}
+                {% if sidebar_notes|length > 0 %}
                     <li class="sidebar-item"><a href="{% url 'private_notes' %}">All Notes</a></li>
                     <li class="sidebar-item"></li>
-                    {% for n in notes %}
+                    {% for n in sidebar_notes %}
                         {% if n.pk == note_selected %}
                             <li class="sidebar-selected">{{ n }}</li>
                         {% else %}
@@ -24,10 +24,10 @@
             <ul class="sidebar-links">
                 <li class="sidebar-item"><a href="{% url 'add_folder' %}">Add Folder</a></li>
                 <li class="sidebar-item"></li>
-                {% if folders|length > 0 %}
+                {% if sidebar_folders|length > 0 %}
                     <li class="sidebar-item"><a href="{% url 'all_folders' %}">All Folder</a></li>
                     <li class="sidebar-item"></li>
-                    {% for f in folders %}
+                    {% for f in sidebar_folders %}
                         {% if f.pk == folder_selected and folder_link %}
                             <li class="sidebar-selected"><a href="{{ f.get_absolute_url }}">{{ f }}</a></li>
                         {% elif f.pk == folder_selected %}
