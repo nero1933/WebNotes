@@ -21,7 +21,7 @@ class Note(models.Model):
         return reverse('show_note', kwargs={'username': self.user.username, 'note_slug': self.slug})
 
     class Meta:
-        ordering = ['time_created']
+        ordering = ['-time_updated']
 
 
 class Folder(models.Model):
@@ -36,6 +36,9 @@ class Folder(models.Model):
 
     def get_absolute_url(self):
         return reverse('show_folder', kwargs={'username': self.user.username, 'folder_slug': self.slug})
+
+    class Meta:
+        ordering = ['-time_updated']
 
 
 # CustomUser

@@ -2,45 +2,57 @@
 
 {% block sidebar %}
     <aside class="aside-left">
-        <div class="sidebar">
-            <ul class="sidebar-links">
-                <li class="sidebar-item"><a href="{% url 'add_private_note' %}">Add Note</a></li>
-                <li class="sidebar-item"></li>
-                {% if sidebar_notes|length > 0 %}
-                    <li class="sidebar-item"><a href="{% url 'private_notes' %}">All Notes</a></li>
-                    <li class="sidebar-item"></li>
+        <!-- sidebar for notes -->
+            <ul class="sidebar">
+                <li class="sidebar-text">notes</li>
+                {% if sidebar_notes|length == 0 %}
+                    <li class="item sidebar-item not-selected"><a href="{% url 'add_private_note' %}">Add Note</a></li>
+                {% else %}
+                    <li class="sidebar-wrapper">
+                        {% for m in sidebar_notes_menu %}
+                            {% if selected == m.url_name %}
+                                <a href="{% url m.url_name %}" class="item sidebar-item selected">{{ m.name }}</a>
+                            {% else %}
+                                <a href="{% url m.url_name %}" class="item sidebar-item not-selected">{{ m.name }}</a>
+                            {% endif %}
+                        {% endfor %}
+                    </li>
+                    <li class="sidebar-text">recent</li>
                     {% for n in sidebar_notes %}
                         {% if n.pk == note_selected %}
-                            <li class="sidebar-selected">{{ n }}</li>
+                            <li class="item sidebar-item selected">{{ n.title.capitalize|truncatechars:16 }}</li>
                         {% else %}
-                            <li class="sidebar-item"><a href="{{ n.get_absolute_url }}">{{ n }}</a></li>
+                            <li class="item sidebar-item not-selected"><a href="{{ n.get_absolute_url }}">{{ n.title.capitalize|truncatechars:16 }}</a></li>
                         {% endif %}
                     {% endfor %}
                 {% endif %}
             </ul>
-        </div>
-
-        <div class="sidebar">
-            <ul class="sidebar-links">
-                <li class="sidebar-item"><a href="{% url 'add_folder' %}">Add Folder</a></li>
-                <li class="sidebar-item"></li>
+            <!-- sidebar for folders -->
+            <ul class="sidebar">
+                <li class="sidebar-text">folders</li>
+                <li class="sidebar-wrapper">
+                    {% for m in sidebar_folder_menu %}
+                        {% if selected == m.url_name %}
+                            <a href="{% url m.url_name %}" class="item sidebar-item selected">{{ m.name }}</a>
+                        {% else %}
+                            <a href="{% url m.url_name %}" class="item sidebar-item not-selected">{{ m.name }}</a>
+                        {% endif %}
+                    {% endfor %}
+                </li>
                 {% if sidebar_folders|length > 0 %}
-                    <li class="sidebar-item"><a href="{% url 'all_folders' %}">All Folder</a></li>
-                    <li class="sidebar-item"></li>
-                    {% for f in sidebar_folders %}
-                        {% if f.pk == folder_selected and folder_link %}
-                            <li class="sidebar-selected"><a href="{{ f.get_absolute_url }}">{{ f }}</a></li>
-                        {% elif f.pk == folder_selected %}
-                            <li class="sidebar-selected">{{ f }}</li>
-                        {% else %}
-                            <li class="sidebar-item"><a href="{{ f.get_absolute_url }}">{{ f }}</a></li>
-                        {% endif %}
-                    {% endfor %}
+                    <li class="sidebar-text">recent</li>
                 {% endif %}
-
-
+                {% for f in sidebar_folders %}
+                    {% if folder_link %}
+                        <li class="item sidebar-item selected"><a href="{{ f.get_absolute_url }}">{{ f|truncatechars:10 }}</a></li>
+                    {% elif f.pk == folder_selected %}
+                        <li class="item sidebar-item selected">{{ f|truncatechars:10 }}</li>
+                    {% else %}
+                        <li class="item sidebar-item not-selected"><a href="{{ f.get_absolute_url }}">{{ f|truncatechars:10 }}</a></li>
+                    {% endif %}
+                {% endfor %}
             </ul>
-        </div>
+
     </aside>
 {% endblock %}
 

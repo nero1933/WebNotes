@@ -4,24 +4,46 @@ from django.shortcuts import redirect
 
 from .models import *
 
-from re import findall
 from slugify import slugify
 
 menu = [
     {'title': 'Private Notes', 'url_name': 'private_notes'},
-    {'title': 'Group notes', 'url_name': 'group_notes'},
+    {'title': 'Group Notes', 'url_name': 'group_notes'},
+]
+
+sidebar_notes_menu = [
+    {'name': 'All', 'url_name': 'private_notes'},
+    {'name': 'Add', 'url_name': 'add_private_note'},
+]
+
+sidebar_folder_menu = [
+    {'name': 'All', 'url_name': 'all_folders'},
+    {'name': 'Add', 'url_name': 'add_folder'},
 ]
 
 
 class DataMixin:
     paginate_by = 1
 
+    @staticmethod
+    def get_sidebar_manu(context_item, sidebar_menu):
+        m = sidebar_menu.copy()
+        if len(context_item) == 0:
+            m.pop(0)
+
+        return m
+
     def get_user_context(self, **kwargs):
         context = kwargs
         context['menu'] = menu
         self.kwargs['username'] = self.request.user
-        context['sidebar_folders'] = Folder.objects.filter(user__username=self.kwargs['username']).select_related('user')
-        context['sidebar_notes'] = Note.objects.filter(user__username=self.kwargs['username']).select_related('user')
+        context['sidebar_notes'] = Note.objects.filter(user__username=
+                                                       self.kwargs['username']).select_related('user')[:5]
+        context['sidebar_folders'] = Folder.objects.filter(user__username=
+                                                           self.kwargs['username']).select_related('user')[:5]
+
+        context['sidebar_notes_menu'] = self.get_sidebar_manu(context['sidebar_notes'], sidebar_notes_menu)
+        context['sidebar_folder_menu'] = self.get_sidebar_manu(context['sidebar_folders'], sidebar_folder_menu)
 
         return context
 
@@ -43,7 +65,6 @@ class DataAssignMixin:
             obj = model.objects.get(user=user_id, slug=slug)
 
             while obj:
-                # duplicate_number = findall(r'(?:\-)(\d{2})(?<=$)', slug)[0]
                 duplicate_number = slug[-2:]
                 slug = slug[:-2] + str(int(duplicate_number) + 1).rjust(2, '0')
                 obj = model.objects.get(user=user_id, slug=slug)
@@ -57,38 +78,3 @@ class DataAssignMixin:
         form_obj.slug = self.slug_check(obj, self.request.user.pk, slugify(form_obj.title))
         form_obj.save()
         return redirect(url)
-
-
-# class MultiSlugMixin:
-#     pk_url_kwarg = 'pk'
-#     slug_url_kwargs = {'slug': 'slug'}  # {slug_field: slug_url_kwarg}
-#     query_pk_and_slug = False
-#
-#     def get_object(self, queryset=None):
-#         if queryset is None:
-#             queryset = self.get_queryset()
-#
-#         pk = self.kwargs.get(self.pk_url_kwarg)
-#         slugs = {
-#             field: self.kwargs[url_kwarg]
-#             for field, url_kwarg in self.slug_url_kwargs.items()
-#         }
-#
-#         if pk is not None:
-#             queryset = queryset.filter(pk=pk)
-#
-#         if slugs and (pk is None or self.query_pk_and_slug):
-#             queryset = queryset.filter(**slugs)
-#
-#         if pk is None and not slugs:
-#             raise AttributeError(
-#                 "Generic detail view %s must be called with either an object "
-#                 "pk or a slug in the URLconf." % self.__class__.__name__
-#             )
-#
-#         try:
-#             obj = queryset.get()
-#         except queryset.model.DoesNotExist:
-#             raise Http404("No %(verbose_name)s found matching the query" %
-#                           {'verbose_name': queryset.model._meta.verbose_name})
-#         return obj

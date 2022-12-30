@@ -26,7 +26,7 @@ class PrivateNotes(LoginRequiredMixin, DataMixin, ListView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        c_def = self.get_user_context(title='Private Notes')
+        c_def = self.get_user_context(title='Private Notes', selected='private_notes')
         return dict(list(context.items()) + list(c_def.items()))
 
     def get_queryset(self):
@@ -43,10 +43,11 @@ class ShowNote(LoginRequiredMixin, DataMixin, DetailView):
         context = super().get_context_data(**kwargs)
         if self.object.folder:
             context['folder_selected'] = self.object.folder.pk
+            context['folder_link'] = True
 
         c_def = self.get_user_context(title='Note: ' + str(context['note']),
-                                      note_selected=self.object.pk,
-                                      folder_link=True)
+                                      note_selected=self.object.pk)
+
         return dict(list(context.items()) + list(c_def.items()))
 
     def get_object(self, queryset=None):
@@ -64,7 +65,7 @@ class AddPrivateNote(LoginRequiredMixin, DataMixin, DataAssignMixin, CreateView)
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        c_def = self.get_user_context(title='Private Notes')
+        c_def = self.get_user_context(title='Private Notes', selected='add_private_note')
         return dict(list(context.items()) + list(c_def.items()))
 
     def form_valid(self, form, *args):
@@ -83,7 +84,7 @@ class AllFolders(LoginRequiredMixin, DataMixin, ListView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        c_def = self.get_user_context(title='All Folders')
+        c_def = self.get_user_context(title='All Folders', selected='all_folders')
         return dict(list(context.items()) + list(c_def.items()))
 
     def get_queryset(self):
@@ -121,7 +122,7 @@ class AddFolder(LoginRequiredMixin, DataMixin, DataAssignMixin, CreateView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        c_def = self.get_user_context(title='Add Folder')
+        c_def = self.get_user_context(title='Add Folder', selected='add_folder')
         return dict(list(context.items()) + list(c_def.items()))
 
     def form_valid(self, form, *args):
