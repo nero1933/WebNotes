@@ -19,9 +19,9 @@
                 {% endif %}
                 {% for n in sidebar_notes %}
                     {% if n.pk == note_selected %}
-                        <li class="sidebar-list">{{ n|truncatechars:20 }}</li>
+                        <li class="sidebar-list">{{ n|truncatechars:19 }}</li>
                     {% else %}
-                        <li class="sidebar-list"><a href="{{ n.get_absolute_url }}">{{ n|truncatechars:20 }}</a></li>
+                        <li class="sidebar-list"><a href="{{ n.get_absolute_url }}">{{ n|truncatechars:19 }}</a></li>
                     {% endif %}
                     <hr class="sidebar-list-separator">
                 {% endfor %}
@@ -43,11 +43,11 @@
                 {% endif %}
                 {% for f in sidebar_folders %}
                     {% if folder_link %}
-                        <li class="sidebar-list"><a href="{{ f.get_absolute_url }}">{{ f|truncatechars:15 }}</a></li>
+                        <li class="sidebar-list"><a href="{{ f.get_absolute_url }}">{{ f|truncatechars:19 }}</a></li>
                     {% elif f.pk == folder_selected %}
-                        <li class="sidebar-list">{{ f|truncatechars:10 }}</li>
+                        <li class="sidebar-list">{{ f|truncatechars:19 }}</li>
                     {% else %}
-                        <li class="sidebar-list"><a href="{{ f.get_absolute_url }}">{{ f|truncatechars:15 }}</a></li>
+                        <li class="sidebar-list"><a href="{{ f.get_absolute_url }}">{{ f|truncatechars:19 }}</a></li>
                     {% endif %}
                     <hr class="sidebar-list-separator">
                 {% endfor %}
@@ -69,13 +69,14 @@
             {% endfor %}
         {% else %}
             {% for note in notes %}
-                <div>
-                    <p>{{ note.title }}: </p>
-                    <p>{{ note.content }}</p>
+                <div class="wrapper-note">
+                    <p><img src="{{ note.icon }}" alt="icon"></p>
+                    <p>{{ note.title }}</p>
+                    <p>{{ note.content|truncatewords:25 }}</p>
                     <p><a href="{{ note.get_absolute_url }}">Reed all</a></p>
-                    <br>
                 </div>
             {% endfor %}
         {% endif %}
     </div>
 {% endblock %}
+

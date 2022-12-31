@@ -42,48 +42,47 @@
 
 <!-- container-main -->
 <div class="container-main">
-    <!-- container for sidebar & content -->
-    <div class="container-sidebar-content">
-        <!-- sidebar -->
-        {% block sidebar %}{% endblock %}
-        <!-- content -->
-        {% block content %}{% endblock %}
-
-    </div>
-
-    <!-- pagination -->
-    {% if  page_obj.has_other_pages %}
-        <!-- container pagination -->
-        <nav class="container-pagination">
-            <ul class="pagination">
-                <!-- left arrow -->
-                {% if page_obj.has_previous %}
-                    <li class="item pagination-item pagination-previous not-selected">
-                        <a href="?page={{ page_obj.previous_page_number }}">&lt;</a>
-                    </li>
-                {% endif %}
-                <!-- current page +/- 2 pages -->
-                {% for p in paginator.page_range %}
-                    {% if page_obj.number == p %}
-                        <li class="item pagination-item selected">
-                            {{ p }}
-                        </li>
-                    {% elif p >= page_obj.number|add:-2 and p <= page_obj.number|add:2 %}
-                        <li class="item pagination-item not-selected">
-                            <a href="?page={{ p }}">{{ p }}</a>
-                        </li>
-                    {% endif %}
-                {% endfor %}
-                <!-- right arrow -->
-                {% if page_obj.has_next %}
-                    <li class="item pagination-item pagination-next not-selected">
-                        <a href="?page={{ page_obj.next_page_number }}">&gt;</a>
-                    </li>
-                {% endif %}
-
-            </ul>
-        </nav>
-    {% endif %}
+    <!-- sidebar -->
+    {% block sidebar %}{% endblock %}
+        <!-- container for content & pagination -->
+        <div class="container-content-pagination">
+            <!-- content -->
+            <div class="container-content">
+                {% block content %}{% endblock %}
+            </div>
+            <!-- pagination -->
+            {% if  page_obj.has_other_pages %}
+                <!-- container pagination -->
+                <nav class="container-pagination">
+                    <ul class="pagination">
+                        <!-- left arrow -->
+                        {% if page_obj.has_previous %}
+                            <li class="item pagination-item pagination-previous not-selected">
+                                <a href="?page={{ page_obj.previous_page_number }}">&lt;</a>
+                            </li>
+                        {% endif %}
+                        <!-- current page +/- 2 pages -->
+                        {% for p in paginator.page_range %}
+                            {% if page_obj.number == p %}
+                                <li class="item pagination-item selected">
+                                    {{ p }}
+                                </li>
+                            {% elif p >= page_obj.number|add:-2 and p <= page_obj.number|add:2 %}
+                                <li class="item pagination-item not-selected">
+                                    <a href="?page={{ p }}">{{ p }}</a>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                        <!-- right arrow -->
+                        {% if page_obj.has_next %}
+                            <li class="item pagination-item pagination-next not-selected">
+                                <a href="?page={{ page_obj.next_page_number }}">&gt;</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            {% endif %}
+        </div>
 </div>
 
 <!-- footer -->

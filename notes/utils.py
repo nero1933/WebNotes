@@ -23,7 +23,7 @@ sidebar_folder_menu = [
 
 
 class DataMixin:
-    paginate_by = 1
+    paginate_by = 5
 
     @staticmethod
     def get_sidebar_manu(context_item, sidebar_menu):
