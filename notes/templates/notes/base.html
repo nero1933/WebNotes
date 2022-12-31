@@ -28,7 +28,7 @@
         </ul>
         <ul>
             {% if request.user.is_authenticated %}
-                <li  class="item nav-item-user not-selected">{{ user.username }}</li>
+                <li  class="item nav-item-user not-selected">{{ user.username.capitalize }}</li>
                 <li  class="item nav-item-user not-selected"><a href="{% url 'logout' %}">Logout</a></li>
             {% else %}
                 <li  class="item nav-item-user not-selected"><a href="{% url 'login' %}">Login</a></li>

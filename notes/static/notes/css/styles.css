@@ -4,6 +4,7 @@
     padding: 0;
 
     font-size: 20px;
+    line-height: 1;
     font-family: 'Open Sans', sans-serif;
 }
 
@@ -31,6 +32,11 @@ a:hover {
 
 .container-main {
     min-height: 85vh;
+}
+
+.container-sidebar {
+    width: 10vw;
+    min-width: 250px;
 }
 
 .container-sidebar-content {
@@ -121,7 +127,6 @@ header li {
     width: 180px;
 
     margin-right: 25px;
-
     padding: 10px;
 }
 
@@ -134,26 +139,14 @@ header li {
     list-style: none;
 }
 
-/*.nav-item {*/
-
-/*}*/
-
 /* header ends */
 
 /* sidebar starts */
 
-.aside-left {
-    height: 100%;
-
-    position: sticky;
-    top: 0;
-}
-
 .sidebar {
-    width: 200px;
+    width: 100%;
 
     margin: 3vh 0 25px 25px;
-
     padding: 10px;
 
     display: flex;
@@ -163,13 +156,8 @@ header li {
 }
 
 .sidebar-text {
-    margin-top: 20px;
-
+    margin-bottom: 15px;
     text-transform: uppercase;
-}
-
-.sidebar-text:first-child {
-    margin-top: 10px;
 }
 
 .sidebar-wrapper {
@@ -186,12 +174,30 @@ header li {
 .sidebar-item {
     width: 100%;
 
-    margin-top: 20px;
     padding: 10px 0 10px 0;
+    margin: 5px 0 20px 0;
 }
 
 .sidebar-wrapper .sidebar-item:not(:only-child):first-child {
     margin-right: 20px;
+}
+
+.sidebar-list { /* list of notes & folders */
+    padding: 5px 20px;
+
+    align-self: start;
+}
+
+.sidebar-list-separator {
+    width: 85%;
+
+    margin: 3px;
+
+    border: 1px solid #eee;
+}
+
+.sidebar-list-separator:last-child {
+    border: 0;
 }
 
 /* sidebar ends */
