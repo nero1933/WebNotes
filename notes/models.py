@@ -17,8 +17,17 @@ class Note(models.Model):
     def __str__(self):
         return self.title
 
+    def get_url(self, template):
+        return reverse(template, kwargs={'username': self.user.username, 'note_slug': self.slug})
+
     def get_absolute_url(self):
-        return reverse('show_note', kwargs={'username': self.user.username, 'note_slug': self.slug})
+        return self.get_url('show_note')
+
+    def get_update_url(self):
+        return self.get_url('update_note')
+
+    def get_delete_url(self):
+        return self.get_url('delete_note')
 
     class Meta:
         ordering = ['-time_updated']
@@ -42,7 +51,6 @@ class Folder(models.Model):
 
 
 # CustomUser
-
 
 # class CustomUserManager(UserManager):
 #     def get(self, *args, **kwargs):

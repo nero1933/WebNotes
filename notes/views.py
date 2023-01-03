@@ -4,7 +4,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, ListView, DetailView
+from django.views.generic import CreateView, ListView, DetailView, DeleteView, UpdateView
 
 from .forms import *
 from .utils import *
@@ -65,7 +65,7 @@ class AddPrivateNote(LoginRequiredMixin, DataMixin, DataAssignMixin, CreateView)
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        c_def = self.get_user_context(title='Private Notes', selected='add_private_note')
+        c_def = self.get_user_context(title='Add note', selected='add_private_note')
         return dict(list(context.items()) + list(c_def.items()))
 
     def form_valid(self, form, *args):
@@ -75,6 +75,43 @@ class AddPrivateNote(LoginRequiredMixin, DataMixin, DataAssignMixin, CreateView)
         kwargs = super(AddPrivateNote, self).get_form_kwargs()
         kwargs['request'] = self.request
         return kwargs
+
+
+class UpdatePrivateNote(LoginRequiredMixin, DataMixin, UpdateView):
+    model = Note
+    template_name = 'notes/update_private_note.html'
+    fields = ['title', 'content', 'icon', 'folder']
+    success_url = reverse_lazy('private_notes')
+    login_url = reverse_lazy('login')
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        c_def = self.get_user_context(title='Change note')
+        return dict(list(context.items()) + list(c_def.items()))
+
+    def get_object(self, queryset=None):
+        try:
+            return Note.objects.get(user=self.request.user.id, slug=self.kwargs.get('note_slug', None))
+        except self.model.DoesNotExist:
+            raise Http404("No such note")
+
+
+class DeletePrivateNote(LoginRequiredMixin, DataMixin, DeleteView):
+    model = Note
+    template_name = 'notes/delete_private_note.html'
+    success_url = reverse_lazy('private_notes')
+    login_url = reverse_lazy('login')
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        c_def = self.get_user_context(title='Delete note')
+        return dict(list(context.items()) + list(c_def.items()))
+
+    def get_object(self, queryset=None):
+        try:
+            return Note.objects.get(user=self.request.user.id, slug=self.kwargs.get('note_slug', None))
+        except self.model.DoesNotExist:
+            raise Http404("No such note")
 
 
 class AllFolders(LoginRequiredMixin, DataMixin, ListView):

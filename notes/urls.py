@@ -2,12 +2,13 @@ from django.urls import path, include
 # from django.contrib.auth import
 
 from .views import *
-
 urlpatterns = [
     path('', index, name='home'),
 
     path('private_notes/', PrivateNotes.as_view(), name='private_notes'),
     path('private_notes/<slug:username>/<slug:note_slug>/', ShowNote.as_view(), name='show_note'),
+    path('private_notes/<slug:username>/<slug:note_slug>/update/', UpdatePrivateNote.as_view(), name='update_note'),
+    path('private_notes/<slug:username>/<slug:note_slug>/delete/', DeletePrivateNote.as_view(), name='delete_note'),
     path('private_notes/add_note/', AddPrivateNote.as_view(), name='add_private_note'),
 
     path('private_folders/', AllFolders.as_view(), name='all_folders'),
@@ -27,3 +28,4 @@ urlpatterns = [
     path('contact_us/', contact_us, name='contact_us'),
 
 ]
+

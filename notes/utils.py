@@ -27,6 +27,13 @@ class DataMixin:
 
     @staticmethod
     def get_sidebar_manu(context_item, sidebar_menu):
+        """
+        If there are no notes the function will remove 'all' link and
+        return dict with only 'add' link. If there are notes the function
+        will return 'all' and 'add'. Same with the folders.
+        context_item - queryset,
+        sidebar_menu - dict
+        """
         m = sidebar_menu.copy()
         if len(context_item) == 0:
             m.pop(0)

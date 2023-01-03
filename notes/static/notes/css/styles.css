@@ -52,8 +52,8 @@ a:hover {
 }
 
 .container-content {
-    width: 100%;
-    height: 100%;
+    /*width: 100%;*/
+    /*height: 100%;*/
 
     padding: 3vh 200px 3vh 200px;
 
@@ -73,7 +73,7 @@ a:hover {
 
 /* boxes & buttons starts */
 
-.pagination, .sidebar, header, .wrapper-note {
+.pagination, .sidebar, header, .wrapper-content, .wrapper-note {
     background:  #cdd7e6;
     border-radius: 6px;
     box-shadow: -5px -5px 7px #ffffff50, 3px 3px 5px rgba(94, 104, 121, 0.288);
@@ -203,6 +203,16 @@ header li {
 
 /* content starts */
 
+.wrapper-content {
+    margin: 0 auto;
+
+    padding: 35px;
+
+    display: flex;
+    flex-direction: column;
+    /*text-align: center;*/
+}
+
 .wrapper-note {
     height: 11.6vh;
     margin-bottom: 3vh;
@@ -217,7 +227,70 @@ header li {
     margin-bottom: 0;
 }
 
+.content-title {
+    margin: 0 auto;
+    padding-bottom: 35px;
+
+    font-size: 24px;
+}
+
+.content-separator {
+    border: 1px solid #eee;
+}
+
+.content-label {
+    padding: 10px 5px;
+}
+
+/* content forms starts */
+
+/*.container-form {*/
+/*    width: 100%;*/
+/*}*/
+
+.form-input {
+    width: 100%;
+
+    background: #f1f7ff;
+    border: 0;
+}
+
+.form-textarea {
+    background: #f1f7ff;
+    border: 0;
+}
+
+/*.id_icon {*/
+/*    background: #f1f7ff;*/
+/*    border: 0;*/
+/*}*/
+
+.form-select{
+    padding: 5px;
+
+    background: #f1f7ff;
+    border: 0;
+}
+
+/* content forms ends */
+
+/* content buttons starts */
+
+.button-form {
+    margin-top: 25px;
+    float: right;
+    padding: 10px;
+
+    border: none;
+}
+
+/* content buttons ends */
+
 /* content ends */
+
+
+/* --- SEPARATOR --- */
+
 
 /* pagination starts */
 
