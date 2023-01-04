@@ -34,7 +34,7 @@ class PrivateNotes(LoginRequiredMixin, PrivateNoteMixin, ListView):
         return Note.objects.filter(user__username=self.kwargs['username']).select_related('user')
 
 
-class ShowNote(LoginRequiredMixin, PrivateNoteMixin, DetailView):
+class ShowNote(LoginRequiredMixin, PrivateNoteMixin, NoteMixin, DetailView):
     model = Note
     template_name = 'notes/show_note.html'
     context_object_name = 'note'
@@ -51,10 +51,7 @@ class ShowNote(LoginRequiredMixin, PrivateNoteMixin, DetailView):
         return dict(list(context.items()) + list(c_def.items()))
 
     def get_object(self, queryset=None):
-        try:
-            return Note.objects.get(user=self.request.user.id, slug=self.kwargs.get('note_slug', None))
-        except self.model.DoesNotExist:
-            raise Http404("No such note")
+        return super().get_object()   # inherits form NoteMixin
 
 
 class AddPrivateNote(LoginRequiredMixin, PrivateNoteMixin, DataAssignMixin, CreateView):
@@ -78,7 +75,7 @@ class AddPrivateNote(LoginRequiredMixin, PrivateNoteMixin, DataAssignMixin, Crea
         return kwargs
 
 
-class UpdatePrivateNote(LoginRequiredMixin, PrivateNoteMixin, UpdateView):
+class UpdatePrivateNote(LoginRequiredMixin, PrivateNoteMixin, NoteMixin, UpdateView):
     model = Note
     form_class = PrivateNoteFormMixin
     template_name = 'notes/update_private_note.html'
@@ -92,10 +89,7 @@ class UpdatePrivateNote(LoginRequiredMixin, PrivateNoteMixin, UpdateView):
         return dict(list(context.items()) + list(c_def.items()))
 
     def get_object(self, queryset=None):
-        try:
-            return Note.objects.get(user=self.request.user.id, slug=self.kwargs.get('note_slug', None))
-        except self.model.DoesNotExist:
-            raise Http404("No such note")
+        return super().get_object()   # inherits form NoteMixin
 
     def get_form_kwargs(self):
         kwargs = super(UpdatePrivateNote, self).get_form_kwargs()
@@ -103,7 +97,7 @@ class UpdatePrivateNote(LoginRequiredMixin, PrivateNoteMixin, UpdateView):
         return kwargs
 
 
-class DeletePrivateNote(LoginRequiredMixin, PrivateNoteMixin, DeleteView):
+class DeletePrivateNote(LoginRequiredMixin, PrivateNoteMixin, NoteMixin, DeleteView):
     model = Note
     template_name = 'notes/delete_private_note.html'
     success_url = reverse_lazy('private_notes')
@@ -115,10 +109,7 @@ class DeletePrivateNote(LoginRequiredMixin, PrivateNoteMixin, DeleteView):
         return dict(list(context.items()) + list(c_def.items()))
 
     def get_object(self, queryset=None):
-        try:
-            return Note.objects.get(user=self.request.user.id, slug=self.kwargs.get('note_slug', None))
-        except self.model.DoesNotExist:
-            raise Http404("No such note")
+        return super().get_object()   # inherits form NoteMixin
 
 
 class AllFolders(LoginRequiredMixin, PrivateNoteMixin, ListView):

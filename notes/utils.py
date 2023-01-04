@@ -23,7 +23,7 @@ sidebar_folder_menu = [
 
 
 class PrivateNoteMixin:
-    paginate_by = 5
+    paginate_by = 9
 
     @staticmethod
     def get_sidebar_manu(context_item, sidebar_menu):
@@ -57,7 +57,12 @@ class PrivateNoteMixin:
 
 
 class NoteMixin:
-    pass
+    def get_object(self, queryset=None):
+        try:
+            return Note.objects.get(user=self.request.user.id, slug=self.kwargs.get('note_slug', None))
+        except self.model.DoesNotExist:
+            raise Http404("No such note")
+
 
 class DataAssignMixin:
     # model.objects.get() and while loop is probably not the best solution.
