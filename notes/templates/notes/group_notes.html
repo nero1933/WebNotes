@@ -3,23 +3,23 @@
 {% extends 'notes/base.html' %}
 
 {% block sidebar %}
-    <aside class="aside-left">
-        <div class="sidebar">
-            <span class=" sidebar-item"><a href="{% url 'add_group_note' %}">Add Note</a></span>
-        </div>
-
-        <div class="sidebar">
-           <ul class="sidebar-links">
-               <li class="sidebar-item"><a href="{% url 'add_group' %}">Add Group</a></li>
-           </ul>
-        </div>
-
-        <div class="sidebar">
-           <ul class="sidebar-links">
-               <li class="sidebar-item"><a href="{% url 'add_group_folder' %}">Add Folder</a></li>
-           </ul>
-        </div>
-    </aside>
+{#    <aside class="aside-left">#}
+{#        <div class="sidebar">#}
+{#            <span class=" sidebar-item"><a href="{% url 'add_group_note' %}">Add Note</a></span>#}
+{#        </div>#}
+{##}
+{#        <div class="sidebar">#}
+{#           <ul class="sidebar-links">#}
+{#               <li class="sidebar-item"><a href="{% url 'add_group' %}">Add Group</a></li>#}
+{#           </ul>#}
+{#        </div>#}
+{##}
+{#        <div class="sidebar">#}
+{#           <ul class="sidebar-links">#}
+{#               <li class="sidebar-item"><a href="{% url 'add_group_folder' %}">Add Folder</a></li>#}
+{#           </ul>#}
+{#        </div>#}
+{#    </aside>#}
 {% endblock %}
 
 {% block content %}

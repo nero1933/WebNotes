@@ -19,7 +19,7 @@
                 {% endif %}
                 {% for n in sidebar_notes %}
                     {% if n.pk == note_selected %}
-                        <li class="sidebar-list">{{ n|truncatechars:19 }}</li>
+                        <li class="sidebar-list selected-text">{{ n|truncatechars:19 }}</li>
                     {% else %}
                         <li class="sidebar-list"><a href="{{ n.get_absolute_url }}">{{ n|truncatechars:19 }}</a></li>
                     {% endif %}
@@ -45,7 +45,7 @@
                     {% if folder_link %}
                         <li class="sidebar-list"><a href="{{ f.get_absolute_url }}">{{ f|truncatechars:19 }}</a></li>
                     {% elif f.pk == folder_selected %}
-                        <li class="sidebar-list">{{ f|truncatechars:19 }}</li>
+                        <li class="sidebar-list selected-text">{{ f|truncatechars:19 }}</li>
                     {% else %}
                         <li class="sidebar-list"><a href="{{ f.get_absolute_url }}">{{ f|truncatechars:19 }}</a></li>
                     {% endif %}
@@ -71,13 +71,16 @@
             {% endfor %}
         {% else %}
             {% for note in notes %}
-                <div class="wrapper-note">
-                    <p><img src="{{ note.icon }}" alt="icon"></p>
-                    <p>{{ note.title }}</p>
-                    <p>{{ note.content|truncatewords:25 }}</p>
-                    <div class="wrapper-note-buttons">
-                        <p><a href="{{ note.get_absolute_url }}" class="item not-selected note-button">Reed all</a></p>
+                <div class="wrapper-list-notes">
+                    <div class="wrapper-list-notes-title">
+                        <p><img src="{{ note.icon }}" alt="icon"></p>
+                        <p>{{ note.title }}</p>
+                    </div>
+                    <hr class="content-separator">
+                    <p class="list-notes-content">{{ note.content|truncatewords:25 }}</p>
+                    <div class="wrapper-list-notes-buttons">
                         <p><a href="{{ note.get_update_url }}" class="item not-selected note-button">Change</a></p>
+                        <p><a href="{{ note.get_absolute_url }}" class="item not-selected note-button">Reed all</a></p>
                         <p><a href="{{ note.get_delete_url }}" class="item not-selected note-button">Delete</a></p>
                     </div>
                 </div>

@@ -19,7 +19,7 @@ def index(request):
     return render(request, 'notes/index.html', {'menu': menu, 'title': 'Home Page'})
 
 
-class PrivateNotes(LoginRequiredMixin, DataMixin, ListView):
+class PrivateNotes(LoginRequiredMixin, PrivateNoteMixin, ListView):
     model = Note
     template_name = 'notes/private_notes.html'
     context_object_name = 'notes'
@@ -34,7 +34,7 @@ class PrivateNotes(LoginRequiredMixin, DataMixin, ListView):
         return Note.objects.filter(user__username=self.kwargs['username']).select_related('user')
 
 
-class ShowNote(LoginRequiredMixin, DataMixin, DetailView):
+class ShowNote(LoginRequiredMixin, PrivateNoteMixin, DetailView):
     model = Note
     template_name = 'notes/show_note.html'
     context_object_name = 'note'
@@ -57,7 +57,7 @@ class ShowNote(LoginRequiredMixin, DataMixin, DetailView):
             raise Http404("No such note")
 
 
-class AddPrivateNote(LoginRequiredMixin, DataMixin, DataAssignMixin, CreateView):
+class AddPrivateNote(LoginRequiredMixin, PrivateNoteMixin, DataAssignMixin, CreateView):
     form_class = PrivateNoteFormMixin
     template_name = 'notes/add_private_note.html'
     context_object_name = 'note'
@@ -78,7 +78,7 @@ class AddPrivateNote(LoginRequiredMixin, DataMixin, DataAssignMixin, CreateView)
         return kwargs
 
 
-class UpdatePrivateNote(LoginRequiredMixin, DataMixin, UpdateView):
+class UpdatePrivateNote(LoginRequiredMixin, PrivateNoteMixin, UpdateView):
     model = Note
     form_class = PrivateNoteFormMixin
     template_name = 'notes/update_private_note.html'
@@ -103,7 +103,7 @@ class UpdatePrivateNote(LoginRequiredMixin, DataMixin, UpdateView):
         return kwargs
 
 
-class DeletePrivateNote(LoginRequiredMixin, DataMixin, DeleteView):
+class DeletePrivateNote(LoginRequiredMixin, PrivateNoteMixin, DeleteView):
     model = Note
     template_name = 'notes/delete_private_note.html'
     success_url = reverse_lazy('private_notes')
@@ -121,7 +121,7 @@ class DeletePrivateNote(LoginRequiredMixin, DataMixin, DeleteView):
             raise Http404("No such note")
 
 
-class AllFolders(LoginRequiredMixin, DataMixin, ListView):
+class AllFolders(LoginRequiredMixin, PrivateNoteMixin, ListView):
     model = Folder
     template_name = 'notes/all_folders.html'
     context_object_name = 'folders'
@@ -135,7 +135,7 @@ class AllFolders(LoginRequiredMixin, DataMixin, ListView):
         return Folder.objects.filter(user__username=self.request.user).select_related('user')
 
 
-class ShowFolder(LoginRequiredMixin, DataMixin, ListView):
+class ShowFolder(LoginRequiredMixin, PrivateNoteMixin, ListView):
     model = Note
     template_name = 'notes/private_notes.html'
     context_object_name = 'folder_notes'
@@ -158,7 +158,7 @@ class ShowFolder(LoginRequiredMixin, DataMixin, ListView):
             raise Http404('No such folder')
 
 
-class AddFolder(LoginRequiredMixin, DataMixin, DataAssignMixin, CreateView):
+class AddFolder(LoginRequiredMixin, PrivateNoteMixin, DataAssignMixin, CreateView):
     form_class = AddFolderForm
     template_name = 'notes/add_folder.html'
     success_url = reverse_lazy('all_folders')
@@ -189,7 +189,7 @@ def add_group_folder(request):
     return render(request, 'notes/add_group_folder.html', {'menu': menu, 'title': 'Add Note', 'template': 'notes/group_notes.html'})
 
 
-class SignInUser(DataMixin, CreateView):
+class SignInUser(PrivateNoteMixin, CreateView):
     form_class = SignInUserForm
     template_name = 'notes/sign_in.html'
     success_url = reverse_lazy('login')
@@ -205,7 +205,7 @@ class SignInUser(DataMixin, CreateView):
         return redirect('home')
 
 
-class LoginUser(DataMixin, LoginView):
+class LoginUser(PrivateNoteMixin, LoginView):
     form_class = AuthenticationForm
     template_name = 'notes/login.html'
 

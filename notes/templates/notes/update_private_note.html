@@ -11,9 +11,9 @@
                 <p class="content-label"><label for="{{ f.id_for_label }}">{{ f.label }}</label></p>
                 <p>{{ f }}</p>
             {% endfor %}
-            <div class="form-wrapper-buttons">
-                <a href="{{ note.get_delete_url }}" class="item not-selected button-form">Delete Note</a>
-                <button type="submit" value="Update" class="item not-selected button-form">Update Note</button>
+            <div class="wrapper-buttons">
+                <button type="submit" value="Update" class="item not-selected button">Update Note</button>
+                <a href="{{ note.get_delete_url }}" class="item not-selected button">Delete Note</a>
             </div>
         </form>
     </div>

@@ -22,7 +22,7 @@ sidebar_folder_menu = [
 ]
 
 
-class DataMixin:
+class PrivateNoteMixin:
     paginate_by = 5
 
     @staticmethod
@@ -43,6 +43,7 @@ class DataMixin:
     def get_user_context(self, **kwargs):
         context = kwargs
         context['menu'] = menu
+        context['selected_menu'] = 'private_notes'
         self.kwargs['username'] = self.request.user
         context['sidebar_notes'] = Note.objects.filter(user__username=
                                                        self.kwargs['username']).select_related('user')[:5]
@@ -54,6 +55,9 @@ class DataMixin:
 
         return context
 
+
+class NoteMixin:
+    pass
 
 class DataAssignMixin:
     # model.objects.get() and while loop is probably not the best solution.
