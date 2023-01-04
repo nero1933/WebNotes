@@ -58,8 +58,9 @@ class ShowNote(LoginRequiredMixin, DataMixin, DetailView):
 
 
 class AddPrivateNote(LoginRequiredMixin, DataMixin, DataAssignMixin, CreateView):
-    form_class = AddPrivateNoteForm
+    form_class = PrivateNoteFormMixin
     template_name = 'notes/add_private_note.html'
+    context_object_name = 'note'
     success_url = reverse_lazy('private_notes')
     login_url = reverse_lazy('login')
 
@@ -79,8 +80,9 @@ class AddPrivateNote(LoginRequiredMixin, DataMixin, DataAssignMixin, CreateView)
 
 class UpdatePrivateNote(LoginRequiredMixin, DataMixin, UpdateView):
     model = Note
+    form_class = PrivateNoteFormMixin
     template_name = 'notes/update_private_note.html'
-    fields = ['title', 'content', 'icon', 'folder']
+    context_object_name = 'note'
     success_url = reverse_lazy('private_notes')
     login_url = reverse_lazy('login')
 
@@ -94,6 +96,11 @@ class UpdatePrivateNote(LoginRequiredMixin, DataMixin, UpdateView):
             return Note.objects.get(user=self.request.user.id, slug=self.kwargs.get('note_slug', None))
         except self.model.DoesNotExist:
             raise Http404("No such note")
+
+    def get_form_kwargs(self):
+        kwargs = super(UpdatePrivateNote, self).get_form_kwargs()
+        kwargs['request'] = self.request
+        return kwargs
 
 
 class DeletePrivateNote(LoginRequiredMixin, DataMixin, DeleteView):

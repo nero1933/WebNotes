@@ -11,7 +11,10 @@
                 <p class="content-label"><label for="{{ f.id_for_label }}">{{ f.label }}</label></p>
                 <p>{{ f }}</p>
             {% endfor %}
-            <button type="submit" class="item not-selected button-form">Add Note</button>
+            <div class="form-wrapper-buttons">
+                <button type="submit" class="item not-selected button-form">Add Note</button>
+            </div>
+
         </form>
     </div>
 {% endblock %}

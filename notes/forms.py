@@ -16,12 +16,12 @@ class SignInUserForm(UserCreationForm):
         fields = ['username', 'email', 'password1', 'password2']
 
 
-class AddPrivateNoteForm(forms.ModelForm):
+class PrivateNoteFormMixin(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request')
-        super(AddPrivateNoteForm, self).__init__(*args, **kwargs)
+        super(PrivateNoteFormMixin, self).__init__(*args, **kwargs)
         self.fields['folder'].queryset = Folder.objects.filter(user=self.request.user.id)
-        self.fields['folder'].empty_label = "Folder isn't selected"
+        self.fields['folder'].empty_label = "None"
 
     class Meta:
         model = Note
@@ -29,10 +29,44 @@ class AddPrivateNoteForm(forms.ModelForm):
         fields = '__all__'
         widgets = {
             'title': forms.TextInput(attrs={'class': 'form-input'}),
-            'content': forms.Textarea(attrs={'class': 'form-textarea', 'cols': 80, 'rows': 12}),
+            'content': forms.Textarea(attrs={'class': 'form-textarea'}),
             'folder': forms.Select(attrs={'class': 'form-select'})
         }
 
+# class AddPrivateNoteForm(forms.ModelForm, NoteFormMixin):
+#     def __init__(self, *args, **kwargs):
+#         self.request = kwargs.pop('request')
+#         super(AddPrivateNoteForm, self).__init__(*args, **kwargs)
+#         self.fields['folder'].queryset = Folder.objects.filter(user=self.request.user.id)
+#         self.fields['folder'].empty_label = "Folder isn't selected"
+#
+#     class Meta:
+#         model = Note
+#         exclude = ['user', 'slug']
+#         fields = '__all__'
+#         widgets = {
+#             'title': forms.TextInput(attrs={'class': 'form-input'}),
+#             'content': forms.Textarea(attrs={'class': 'form-textarea', 'cols': 80, 'rows': 12}),
+#             'folder': forms.Select(attrs={'class': 'form-select'})
+#         }
+#
+#
+# class UpdatePrivateNoteForm(forms.ModelForm):
+#     def __init__(self, *args, **kwargs):
+#         self.request = kwargs.pop('request')
+#         super(UpdatePrivateNoteForm, self).__init__(*args, **kwargs)
+#         self.fields['folder'].queryset = Folder.objects.filter(user=self.request.user.id)
+#         self.fields['folder'].empty_label = "Folder isn't selected"
+#
+#     class Meta:
+#         model = Note
+#         exclude = ['user', 'slug']
+#         fields = '__all__'
+#         widgets = {
+#             'title': forms.TextInput(attrs={'class': 'form-input'}),
+#             'content': forms.Textarea(attrs={'class': 'form-textarea', 'cols': 80, 'rows': 12}),
+#             'folder': forms.Select(attrs={'class': 'form-select'})
+#         }
 
 class AddFolderForm(forms.ModelForm):
     class Meta:
